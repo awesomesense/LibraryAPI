@@ -1,0 +1,1 @@
+!function(){"use strict";angular.module("libraryApp",["libraryService"])}(),function(){"use strict";function a(a){function b(){}a.title="libraryController",b()}angular.module("libraryApp").controller("libraryController",a),a.$inject=["$scope"]}();
