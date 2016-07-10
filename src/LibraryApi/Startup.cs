@@ -43,14 +43,20 @@ namespace LibraryApi
             services.Configure<AppMongoSettings>(Configuration.GetSection("Data:MongoDb"));
 
 
-            // Add repository type.
-            // SQL
-            services.AddScoped<IDataRepository<AuthorItem>, AuthorSqlRepository>();
-            services.AddScoped<IDataRepository<BookItem>, BookSqlRepository>();
-
-            // or MONGO:
-            //services.AddScoped<IDataRepository<AuthorItem>, AuthorMongoRepository>();  
-            //services.AddScoped<IDataRepository<BookItem>, BookMongoRepository>();  
+            // Add repository type (from appsettings).
+            string repositoryType = Configuration["RepositoryType"];
+            if (repositoryType.ToLower() == "mongo")
+            {
+                // MONGO
+                services.AddScoped<IDataRepository<AuthorItem>, AuthorMongoRepository>();
+                services.AddScoped<IDataRepository<BookItem>, BookMongoRepository>();
+            }
+            else
+            {
+                // SQL
+                services.AddScoped<IDataRepository<AuthorItem>, AuthorSqlRepository>();
+                services.AddScoped<IDataRepository<BookItem>, BookSqlRepository>();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
