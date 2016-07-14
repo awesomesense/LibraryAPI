@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Data.Entity;
+using Microsoft.Data.Entity.Infrastructure;
 
 namespace LibraryApi.Models
 {
@@ -11,5 +12,14 @@ namespace LibraryApi.Models
         public DbSet<AuthorItem> Authors { get; set; }
 
         public DbSet<BookItem> Books { get; set; }
+
+        public AppDbContext()
+        {
+        }
+
+        public AppDbContext(DbContextOptions options)
+            : base(options)
+        {
+        }
     }
 }
