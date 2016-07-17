@@ -35,7 +35,7 @@ namespace LibraryApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] BookItem item)
         {
-            if (item == null)
+            if (item == null || !ModelState.IsValid)
             {
                 return HttpBadRequest();
             }
@@ -46,7 +46,7 @@ namespace LibraryApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] BookItem item)
         {
-            if (item == null || item.Id != id)
+            if (item == null || item.Id != id || !ModelState.IsValid)
             {
                 return HttpBadRequest();
             }

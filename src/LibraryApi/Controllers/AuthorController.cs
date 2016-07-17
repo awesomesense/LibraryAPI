@@ -35,7 +35,7 @@ namespace LibraryApi.Controllers
         [HttpPost]
         public IActionResult Create([FromBody] AuthorItem item)
         {
-            if (item == null)
+            if (item == null || !ModelState.IsValid)
             {
                 return HttpBadRequest();
             }
@@ -46,7 +46,7 @@ namespace LibraryApi.Controllers
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] AuthorItem item)
         {
-            if (item == null || item.Id != id)
+            if (item == null || item.Id != id || !ModelState.IsValid)
             {
                 return HttpBadRequest();
             }
@@ -64,7 +64,11 @@ namespace LibraryApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            AuthorItems.Remove(id);
+            var author = AuthorItems.Find(id);
+            if (author != null)
+            {
+                AuthorItems.Remove(id);
+            }
         }
 
     }
