@@ -66,7 +66,7 @@ namespace LibraryApi.Models
             }
             catch (SqlException e)
             {
-
+                // TODO: handle an exception
             }
         }
     }

@@ -15,6 +15,9 @@ namespace LibraryApi.Controllers
         [FromServices]
         public IDataRepository<BookItem> BookItems { get; set; }
 
+        private const string _messageNotFound = "Book not found";
+        private const string _messageInvalidObject = "Invalid object of Book";
+
         [HttpGet]
         public IEnumerable<BookItem> GetAll()
         {
@@ -27,7 +30,8 @@ namespace LibraryApi.Controllers
             var item = BookItems.Find(id);
             if (item == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return new HttpNotFoundObjectResult(new { Message = _messageNotFound });
             }
             return new ObjectResult(item);
         }
@@ -37,7 +41,8 @@ namespace LibraryApi.Controllers
         {
             if (item == null || !ModelState.IsValid)
             {
-                return HttpBadRequest();
+                //return HttpBadRequest();
+                return new BadRequestObjectResult(_messageInvalidObject);
             }
             BookItems.Add(item);
             return CreatedAtRoute("GetBook", new { controller = "Book", id = item.Id }, item);
@@ -48,13 +53,15 @@ namespace LibraryApi.Controllers
         {
             if (item == null || item.Id != id || !ModelState.IsValid)
             {
-                return HttpBadRequest();
+                //return HttpBadRequest();
+                return new BadRequestObjectResult(_messageInvalidObject);
             }
 
             var book = BookItems.Find(id);
             if (book == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return new HttpNotFoundObjectResult(new { Message = _messageNotFound });
             }
 
             BookItems.Update(item);
@@ -64,7 +71,11 @@ namespace LibraryApi.Controllers
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
-            BookItems.Remove(id);
+            var book = BookItems.Find(id);
+            if (book != null)
+            {
+                BookItems.Remove(id);
+            }
         }
 
     }

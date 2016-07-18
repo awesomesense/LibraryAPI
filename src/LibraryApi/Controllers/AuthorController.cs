@@ -14,7 +14,10 @@ namespace LibraryApi.Controllers
     {
         [FromServices]
         public IDataRepository<AuthorItem> AuthorItems { get; set; }
-        
+
+        private const string _messageNotFound = "Author not found";
+        private const string _messageInvalidObject = "Invalid object of Author";
+
         [HttpGet]
         public IEnumerable<AuthorItem> GetAll()
         {
@@ -27,7 +30,8 @@ namespace LibraryApi.Controllers
             var item = AuthorItems.Find(id);
             if (item == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return new HttpNotFoundObjectResult(new { Message = _messageNotFound });
             }
             return new ObjectResult(item);
         }
@@ -37,7 +41,8 @@ namespace LibraryApi.Controllers
         {
             if (item == null || !ModelState.IsValid)
             {
-                return HttpBadRequest();
+                //return HttpBadRequest();
+                return new BadRequestObjectResult(_messageInvalidObject);
             }
             AuthorItems.Add(item);
             return CreatedAtRoute("GetAuthor", new { controller = "Author", id = item.Id }, item);
@@ -48,13 +53,15 @@ namespace LibraryApi.Controllers
         {
             if (item == null || item.Id != id || !ModelState.IsValid)
             {
-                return HttpBadRequest();
+                //return HttpBadRequest();
+                return new BadRequestObjectResult(_messageInvalidObject);
             }
 
             var author = AuthorItems.Find(id);
             if (author == null)
             {
-                return HttpNotFound();
+                //return HttpNotFound();
+                return new HttpNotFoundObjectResult(new { Message = _messageNotFound });
             }
 
             AuthorItems.Update(item);
